@@ -1,0 +1,54 @@
+<launch>
+  
+  	<arg name="nodelet_manager_name" default="ladybug_nodelet_manager" />
+  	<arg name="record" 			default="true" />
+  	<arg name="remap" 			default="true" />
+  	<arg name="rate"			default="0.1" />
+  	<arg name="record_args"		default="" />
+  	<arg name="record_clock"    default="$(arg record)" />
+  	
+  	<arg name="topics" default="/ladybug5/camera0/image_color_rect/selected
+							    /ladybug5/camera0/image_color_rect/selected_info
+							    /ladybug5/camera1/image_color_rect/selected
+							    /ladybug5/camera1/image_color_rect/selected_info
+							    /ladybug5/camera2/image_color_rect/selected
+							    /ladybug5/camera2/image_color_rect/selected_info
+							    /ladybug5/camera3/image_color_rect/selected
+							    /ladybug5/camera3/image_color_rect/selected_info
+							    /ladybug5/camera4/image_color_rect/selected
+							    /ladybug5/camera4/image_color_rect/selected_info
+							    /ladybug5/camera5/image_color_rect/selected
+							    /ladybug5/camera5/image_color_rect/selected_info
+							    /cloud_aggregator/filtered
+							    /joint_states
+							    /tf
+							    " />
+							    
+	<node pkg="rosbag" type="record" name="rosbag_record_clock" args="-o /tmp/rosbag/clock /clock" if="$(arg record_clock)" />
+ 	<node pkg="rosbag" type="record" name="rosbag_record_thesis" args="-o /tmp/rosbag/data $(arg topics) $(arg record_args)" if="$(arg record)" />
+       
+	<include file="$(find play)/launch/graz1.launch">
+    	<arg name="tf_calibration" 			value="false" />
+    	<arg name="match_image_pointcloud" 	value="false" />
+    	<arg name="usebag_tf"				value="true"  />
+    	<arg name="filter"					value="true" />
+    	<arg name="rate"					value="$(arg rate)" />
+    	<arg name="bag_delay"				value="7" />
+    	<arg name="nodelet_manager_name" 	value="$(arg nodelet_manager_name)" />
+	</include>
+
+	<group>
+		<include file="$(find fiddle)/launch/remap_matches.launch" if="$(arg remap)">
+			<arg name="camera0" 		value="/ladybug5/camera0/image_color_rect" />
+			<arg name="camera1" 		value="/ladybug5/camera1/image_color_rect" />
+			<arg name="camera2" 		value="/ladybug5/camera2/image_color_rect" />
+			<arg name="camera3" 		value="/ladybug5/camera3/image_color_rect" />
+			<arg name="camera4" 		value="/ladybug5/camera4/image_color_rect" />
+			<arg name="camera5" 		value="/ladybug5/camera5/image_color_rect" />
+			<arg name="pointcloud" 		value="/cloud_aggregator/filtered" />
+			<arg name="nodelet_manager" value="$(arg nodelet_manager_name)" />
+		</include>
+	</group>
+
+	
+</launch>

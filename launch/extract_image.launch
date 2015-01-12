@@ -1,0 +1,11 @@
+<launch>
+  <arg name="name"			default="extract_image" />
+  <arg name="path"			default="/home/fnolden/Bilder/exported/" />
+  <arg name="filename"		default="$(arg name)_%06i.jpg" />
+  <arg name="image" 		default="/ladybug5/camera4/image_color_rect/selected" />
+  
+  <node name="$(arg name)" pkg="image_view" type="extract_images" respawn="false" output="screen" cwd="node">
+  	<remap from="image" to="$(arg image)"/>
+	<param name="filename_format" value="$(arg path)$(arg filename)"/>
+  </node>
+</launch>

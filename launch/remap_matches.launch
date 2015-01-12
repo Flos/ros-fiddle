@@ -1,0 +1,64 @@
+<launch>
+	<arg name="camera0" 		default="/ladybug5/camera0/image_color_rect" />
+	<arg name="camera1" 		default="/ladybug5/camera1/image_color_rect" />
+	<arg name="camera2" 		default="/ladybug5/camera2/image_color_rect" />
+	<arg name="camera3" 		default="/ladybug5/camera3/image_color_rect" />
+	<arg name="camera4" 		default="/ladybug5/camera4/image_color_rect" />
+	<arg name="camera5" 		default="/ladybug5/camera5/image_color_rect" />
+	<arg name="pointcloud" 		default="/cloud_aggregator/filtered" />
+	<arg name="nodelet_manager" default="nodelet_manager" />
+	
+		<include file="$(find image_cloud)/launch/sync_remap.launch" >
+			<arg name="subscribe_topic_pcl" 		value="$(arg pointcloud)" />
+			<arg name="subscribe_topic_image" 		value="$(arg camera0)"/>
+			<arg name="subscribe_topic_image_info"	value="$(arg camera0)_info"/>
+			<arg name="nodelet_manager" 			value="$(arg nodelet_manager)"/>
+			<arg name="name"						value="sync_remapper0"/>
+		</include>
+		
+		<include file="$(find image_cloud)/launch/sync_remap.launch" >
+			<arg name="subscribe_topic_pcl" 		value="$(arg pointcloud)"/>
+			<arg name="subscribe_topic_image" 		value="$(arg camera1)"/>
+			<arg name="subscribe_topic_image_info"	value="$(arg camera1)_info"/>
+			<arg name="nodelet_manager" 			value="$(arg nodelet_manager)"/>
+			<arg name="name"						value="sync_remapper1"/>
+			<arg name="republish_pointcloud"		value="false" />
+		</include>
+		
+		<include file="$(find image_cloud)/launch/sync_remap.launch" >
+			<arg name="subscribe_topic_pcl" 		value="$(arg pointcloud)"/>
+			<arg name="subscribe_topic_image" 		value="$(arg camera2)"/>
+			<arg name="subscribe_topic_image_info"	value="$(arg camera2)_info"/>
+			<arg name="nodelet_manager" 			value="$(arg nodelet_manager)"/>
+			<arg name="name"						value="sync_remapper2"/>
+			<arg name="republish_pointcloud"		value="false" />
+		</include>
+		
+		<include file="$(find image_cloud)/launch/sync_remap.launch" >
+			<arg name="subscribe_topic_pcl" 		value="$(arg pointcloud)"/>
+			<arg name="subscribe_topic_image" 		value="$(arg camera3)"/>
+			<arg name="subscribe_topic_image_info"	value="$(arg camera3)_info"/>
+			<arg name="nodelet_manager" 			value="$(arg nodelet_manager)"/>
+			<arg name="name"						value="sync_remapper3"/>
+			<arg name="republish_pointcloud"		value="false" />
+		</include>
+		
+		<include file="$(find image_cloud)/launch/sync_remap.launch" >
+			<arg name="subscribe_topic_pcl" 		value="$(arg pointcloud)"/>
+			<arg name="subscribe_topic_image" 		value="$(arg camera4)"/>
+			<arg name="subscribe_topic_image_info"	value="$(arg camera4)_info"/>
+			<arg name="nodelet_manager" 			value="$(arg nodelet_manager)"/>
+			<arg name="name"						value="sync_remapper4"/>
+			<arg name="republish_pointcloud"		value="false" />
+		</include>
+	
+		<include file="$(find image_cloud)/launch/sync_remap.launch" >
+			<arg name="subscribe_topic_pcl" 		value="$(arg pointcloud)"/>
+			<arg name="subscribe_topic_image" 		value="$(arg camera5)"/>
+			<arg name="subscribe_topic_image_info"	value="$(arg camera5)_info"/>
+			<arg name="nodelet_manager" 			value="$(arg nodelet_manager)"/>
+			<arg name="name"						value="sync_remapper5"/>
+			<arg name="republish_pointcloud"		value="false" />
+		</include>
+
+</launch>
