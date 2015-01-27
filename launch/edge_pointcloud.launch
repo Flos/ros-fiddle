@@ -7,7 +7,7 @@
   	<param name="sub" 	value="/ladybug5/camera4/image_raw" />
   	<param name="pub" 	value="/ladybug5/camera4/image_color_rect" />
   	<param name="lut" 	value="$(find ladybug)/calibration/13122828_camera4_h1024_w1224_map_" />
-  	<param name="sub_info" 	value="/ladybug5/camera4/camera_info" />
+  	<param name="sub_info" 	value="/ladybug5/camera4/image_raw_info" />
   	<param name="zoom" 	value="2.2" />
   </node>
   
