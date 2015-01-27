@@ -1,0 +1,43 @@
+<launch>
+	<arg name="subscribe_topic_pcl"			default="/velodyne/cloud/filter_transformed" />
+	<arg name="subscribe_topic_image"		default="/ladybug5/camera4/image_color_rect/synced/blur_gamma" />
+	<arg name="subscribe_topic_image_info" 	default="$(arg subscribe_topic_image)_info"/>
+	<arg name="publish_topic_pcl"			default="$(arg subscribe_topic_pcl)/selected"/>
+	<arg name="publish_topic_image"			default="$(arg subscribe_topic_image)/selected"/>
+	<arg name="publish_topic_image_info"	default="$(arg publish_topic_image)_info"/>
+	<arg name="name"						default="synced_pcd_image"/>
+  	<arg name="path"						default="/home/fnolden/Bilder/exported/" />
+  	<arg name="filename"					default="$(arg name)_%06i.jpg" />
+  	
+  	<group ns="$(arg name)">
+  		<include file="$(find start)/launch/nodelet_manager.launch" >
+  			<arg name="name"				value="nodelet_manager_extractor" />
+  		</include>
+	
+		<include file="$(find image_cloud)/launch/sync_remap.launch">
+			<arg name="subscribe_topic_pcl"			value="$(arg subscribe_topic_pcl)"/>
+			<arg name="subscribe_topic_image"		value="$(arg subscribe_topic_image)"/>/>
+			<arg name="subscribe_topic_image_info" 	value="$(arg subscribe_topic_image)_info"/>
+			<arg name="publish_topic_pcl"			value="$(arg subscribe_topic_pcl)/out"/>
+			<arg name="publish_topic_image"			value="$(arg subscribe_topic_image)/out"/>
+			<arg name="publish_topic_image_info"	value="$(arg publish_topic_image)_info"/>
+			<arg name="nodelet_manager" 			value="nodelet_manager_extractor"/>
+			<arg name="name"						value="sync_remapper_pcd_image"/>
+		</include>
+		
+		<include file="$(find fiddle)/launch/extract_image.launch">
+			<arg name="name"			value="extract_image" />
+		  	<arg name="path"			value="/home/fnolden/Bilder/exported/" />
+		  	<arg name="filename"		value="$(arg name)_%06i.jpg" />
+		  	<arg name="image" 			value="$(arg subscribe_topic_image)" />
+		</include>
+		
+		<include file="$(find fiddle)/launch/extract_pcd.launch">
+			<arg name="name" 			value="pcd_extractor" />
+			<arg name="prefix"			value="$(arg path)/$(arg name)_" />
+			<arg name="topic"			value="$(arg subscribe_topic_pcl)" />
+		</include>
+		
+	</group>
+	
+</launch>

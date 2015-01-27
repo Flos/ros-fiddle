@@ -1,0 +1,128 @@
+<launch>
+  <arg name="camera" 						default="4" />
+  <arg name="subscribe_topic_pcl" 			default="/velodyne/cloud" />
+  <arg name="subscribe_topic_image"			default="/ladybug5/camera$(arg camera)/image_color_rect" />
+  <arg name="subscribe_topic_image_info" 	default="/ladybug5/camera$(arg camera)/image_color_rect_info" />
+  <arg name="image_tf_frame_id"				default="" />
+  <arg name="nodelet_manager" 				default="ladybug_nodelet" />
+  <arg name="point_size"					default="1" />
+  
+  <arg name="save"							default="true" />
+  <arg name="save_path" 					default="/home/fnolden/Bilder/exported/" />
+  
+  <group ns="pcl_to_pointcloud_all_features$(arg camera)">
+  
+  	  <include file="$(find image_cloud)/launch/pcl_to_image.launch" >
+  	  	<arg name="name"						value="pointcloud$(arg camera)_image0" />
+  	  	<arg name="nodelet_manager"				value="$(arg nodelet_manager)" />
+  	  	<arg name="subscribe_topic_pcl"			value="$(arg subscribe_topic_pcl)" />
+  	  	<arg name="subscribe_topic_image_info"	value="$(arg subscribe_topic_image_info)" />
+		<arg name="publish_topic"				value="$(arg subscribe_topic_image)/point_cloud0" />
+  	  	<arg name="image_tf_frame_id"			value="$(arg image_tf_frame_id)" />
+		<arg name="use_reference_frame"			value="0" />
+		<arg name="point_size"					value="$(arg point_size)" />
+		<arg name="reference_frame"				value="/odom" />
+		<arg name="feature"						value="0" />
+		<arg name="save"						value="$(arg save)" />
+		<arg name="save_path"					value="$(arg save_path)" />
+		<arg name="save_depth"					value="$(arg save)" />
+  	  </include>
+  	  
+  	  <include file="$(find image_cloud)/launch/pcl_to_image.launch" >
+  	  	<arg name="name"						value="pointcloud$(arg camera)_image1" />
+  	  	<arg name="nodelet_manager"				value="$(arg nodelet_manager)" />
+  	  	<arg name="subscribe_topic_pcl"			value="$(arg subscribe_topic_pcl)" />
+  	  	<arg name="subscribe_topic_image_info"	value="$(arg subscribe_topic_image_info)" />
+		<arg name="publish_topic"				value="$(arg subscribe_topic_image)/point_cloud1" />
+  	  	<arg name="image_tf_frame_id"			value="$(arg image_tf_frame_id)" />
+		<arg name="use_reference_frame"			value="0" />
+		<arg name="point_size"					value="$(arg point_size)" />
+		<arg name="reference_frame"				value="/odom" />
+		<arg name="feature"						value="1" />
+		<arg name="save"						value="$(arg save)" />
+		<arg name="save_path"					value="$(arg save_path)" />
+  	  </include>
+  	  
+  	  <include file="$(find image_cloud)/launch/pcl_to_image.launch" >
+  	  	<arg name="name"						value="pointcloud$(arg camera)_image2" />
+  	  	<arg name="nodelet_manager"				value="$(arg nodelet_manager)" />
+  	  	<arg name="subscribe_topic_pcl"			value="$(arg subscribe_topic_pcl)" />
+  	  	<arg name="subscribe_topic_image_info"	value="$(arg subscribe_topic_image_info)" />
+		<arg name="publish_topic"				value="$(arg subscribe_topic_image)/point_cloud2" />
+		<arg name="publish_topic_pcl" 			value="$(arg subscribe_topic_image)/filter2" />
+  	  	<arg name="image_tf_frame_id"			value="$(arg image_tf_frame_id)" />
+		<arg name="use_reference_frame"			value="0" />
+		<arg name="point_size"					value="$(arg point_size)" />
+		<arg name="reference_frame"				value="/odom" />
+		<arg name="feature"						value="2" />
+		<arg name="save"						value="$(arg save)" />
+		<arg name="save_path"					value="$(arg save_path)" />
+  	  </include>
+  	  
+  	  <include file="$(find image_cloud)/launch/pcl_to_image.launch" >
+  	  	<arg name="name"						value="pointcloud$(arg camera)_image3" />
+  	  	<arg name="nodelet_manager"				value="$(arg nodelet_manager)" />
+  	  	<arg name="subscribe_topic_pcl"			value="$(arg subscribe_topic_pcl)" />
+  	  	<arg name="subscribe_topic_image_info"	value="$(arg subscribe_topic_image_info)" />
+		<arg name="publish_topic"				value="$(arg subscribe_topic_image)/point_cloud3" />
+  	  	<arg name="image_tf_frame_id"			value="$(arg image_tf_frame_id)" />
+		<arg name="use_reference_frame"			value="0" />
+		<arg name="point_size"					value="$(arg point_size)" />
+		<arg name="reference_frame"				value="/odom" />
+		<arg name="feature"						value="3" />
+		<arg name="save"						value="$(arg save)" />
+		<arg name="save_path"					value="$(arg save_path)" />
+  	  </include>
+  	  
+  	  <include file="$(find image_cloud)/launch/sync_remap.launch" >
+			<arg name="subscribe_topic_pcl" 		value="$(arg subscribe_topic_pcl)" />
+			<arg name="subscribe_topic_image" 		value="$(arg subscribe_topic_image)"/>
+			<arg name="subscribe_topic_image_info"	value="$(arg subscribe_topic_image_info)"/>
+			<arg name="publish_topic_image"			value="$(arg subscribe_topic_image)/synced_old"/>
+			<arg name="nodelet_manager" 			value="$(arg nodelet_manager)"/>
+			<arg name="name"						value="sync_remapper_rect"/>
+	  </include>
+		
+	  <include if="$(arg save)" file="$(find image_cloud)/launch/sync_image.launch" >
+			<arg name="subscribe_topic_image1" 		value="$(arg subscribe_topic_image)"/>
+			<arg name="subscribe_topic_image2"		value="$(arg subscribe_topic_image)/point_cloud0"/>
+			<arg name="publish_topic_image1"		value="$(arg subscribe_topic_image)/synced"/>
+			<arg name="publish_image2"				value="0" />
+			<arg name="nodelet_manager" 			value="$(arg nodelet_manager)"/>
+	  </include> 
+	  
+	  <include if="$(arg save)" file="$(find fiddle)/launch/extract_image.launch">
+	  	<arg name="name" 	value="ex$(arg camera)_rect" />
+	  	<arg name="image" 	value="$(arg subscribe_topic_image)/synced" />	  	
+	  	<arg name="path"	value="$(arg save_path)" />
+	  </include>
+	  
+	  <include file="$(find image_enhancement)/launch/blur_gamma.launch" >
+	  		<arg name="image_topic_in"  	value="$(arg subscribe_topic_image)/synced" />
+			<arg name="image_topic_out" 	value="$(arg subscribe_topic_image)/synced/blur_gamma" />
+			<arg name="nodelet_manager" 	value="$(arg nodelet_manager)" />
+			<arg name="camera"				value="$(arg camera)" />
+			<arg name="gamma"				value="1.9" />
+	  </include>
+	   
+  	  <include file="$(find image_cloud)/launch/fusion.launch" >
+  	  	<arg name="camera" 						value="$(arg camera)" />
+		<arg name="name"						value="image$(arg camera)_pcl_fusion"/>
+		<arg name="subscribe_topic_pcl" 		value="$(arg subscribe_topic_image)/filter2" />
+	  	<arg name="subscribe_topic_image"		value="$(arg subscribe_topic_image)/synced/blur_gamma" />
+	  	<arg name="subscribe_topic_image_info" 	value="$(arg subscribe_topic_image)_info" />
+	  	<arg name="image_tf_frame_id"			value="ladybug_camera$(arg camera)" />
+		<arg name="tf_buffer_length"			value="30" />
+		<arg name="queue_size"					value="100" />
+		<arg name="publish_pointcloud" 			value="$(arg subscribe_topic_image)/filter2/fused/pointcloud"/>
+		<arg name="publish_image"	 			value="$(arg subscribe_topic_image)/filter2/fused/image"/>
+		
+		<arg name="image_frame_id"				value="ladybug_camera$(arg camera)"/>
+		<arg name="reference_frame_id"			value="/odom"/>
+		<arg name="nodelet_manager" 			value="$(arg nodelet_manager)"/>
+		<arg name="save"						value="1" />
+		<arg name="save_path"					value="$(arg save_path)" />
+  	  </include>
+  	  
+  	</group>
+</launch>

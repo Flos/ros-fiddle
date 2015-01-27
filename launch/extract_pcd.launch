@@ -1,0 +1,9 @@
+<launch>
+	<arg name="name" 			default="pcd_extractor" />
+	<arg name="prefix"			default="~/Bilder/extracted" />
+	<arg name="topic"			default="/velodyne/cloud" />
+	
+	<node name="$(arg name)" pkg="pcl_ros" type="pointcloud_to_pcd" respawn="false" output="screen" cwd="node" args="input:=$(arg topic)">
+		<param name="prefix" 			value="$(arg prefix) "/>
+  	</node>
+</launch>
