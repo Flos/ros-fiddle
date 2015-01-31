@@ -107,6 +107,16 @@ catkin_package(
 #   ${catkin_LIBRARIES}
 # )
 
+catkin_install_python(PROGRAMS
+	src/timestamps_bag_fix
+	stc/timestamps_bag_fix.py
+DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/timestamps_bag_fix
+)
+install(FILES
+DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/timestamps_bag_fix
+)
+
+
 #############
 ## Install ##
 #############
