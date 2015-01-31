@@ -8,11 +8,17 @@ def fix_time(bag_in, bag_out, seconds):
 	    for topic, msg, t in rosbag.Bag(bag_in).read_messages():
 	        # This also replaces tf timestamps under the assumption 
 	        # that all transforms in the message share the same timestamp
+	        
 	        duration = rospy.Duration(seconds)
+	              
 	        if topic == "/tf" and msg.transforms:
-	            outbag.write(topic, msg, (msg.transforms[0].header.stamp + duration))
+	            outbag.write(topic, msg, msg.transforms[0].header.stamp + duration)
+	            
+	        if msg._has_header:
+	            msg.header.stamp =  msg.header.stamp + duration
+	            outbag.write(topic, msg, msg.header.stamp )
 	        else:
-	            outbag.write(topic, msg, (msg.header.stamp + duration) if msg._has_header else t)
+	            outbag.write(topic, msg, t)
 
 
 if __name__=="__main__":
