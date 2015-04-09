@@ -14,8 +14,8 @@ elif [ $2 -a $2 != " " ]; then
 	VIDEO_OUT=$2
 fi
 if [ $3 -a $3 != " " ] && [ $3 != 0 ]; then
-	START_NUMBER="-start_number $3"
-	echo "start code $START_NUMBER"
+	VIDEO_FPS=$3
+	echo "FPS set to $VIDEO_FPS"
 fi
 echo "Video out: $VIDEO_OUT, rate $VIDEO_FPS, start $START_NUMBER"
 avconv -r $VIDEO_FPS $START_NUMBER -f image2 -i $1%010d.jpg $VIDEO_CODEC $VIDEO_OUT
