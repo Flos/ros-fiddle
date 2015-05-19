@@ -1,0 +1,4 @@
+# Blacklist for supermicro mb
+blacklist mei
+blacklist mei_me
+
