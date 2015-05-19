@@ -3,7 +3,7 @@ VIDEO_OUT="out.avi"
 VIDEO_FPS=25
 VIDEO_BITRATE=2000k
 VIDEO_CODEC_H264="-vcodec libx264 -profile:v high444 -refs 16 -crf 0 -preset ultrafast"
-VIDEO_CODEC="-vcodec mjpeg"
+VIDEO_CODEC="-vcodec mjpeg -qscale:v 1"
 IMAGE_START=0
 START_NUMBER=""
 
